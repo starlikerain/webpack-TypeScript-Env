@@ -1,4 +1,13 @@
-let num: number = 123
-console.log(num)
+import './example/symbol'
+import './example/class'
+import './example/enum'
+declare global {
+  interface Window {
+    arr: any[]
+  }
+}
 
-document.title = '卧槽'
+// let num: number = 123
+// console.log(num)
+//
+// document.title = '卧槽'
