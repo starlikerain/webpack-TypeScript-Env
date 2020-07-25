@@ -33,5 +33,4 @@ if (instance instanceof A) {
     console.log(instance.name)
 } else {
     console.log(instance.age)
-
 }

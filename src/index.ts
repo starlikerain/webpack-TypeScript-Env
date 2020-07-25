@@ -1,6 +1,7 @@
-import './example/symbol'
-import './example/class'
-import './example/enum'
+// import './example/symbol'
+// import './example/class'
+// import './example/enum'
+import './example/advanced-types2'
 declare global {
   interface Window {
     arr: any[]
