@@ -1,15 +1,20 @@
 import webpack from "webpack"
 
 interface Info1 {
-  age: number
-  sex: string
-  name: string
+  readonly age?: number
+  sex?: string
+  name?: string
 }
 
 type readOnlyType<T> = {
-  readonly [P in keyof T]: T[P]
+  +readonly [P in keyof T]: T[P]
 }
 
+type removeReadonly<T> = {
+  -readonly [P in keyof T]-?: T[P]
+}
+// 对上面的info1进行重新的定义了，本来没有，未来也不准有readonly，而且这个type removeReadonly每个属性都是必选的
+type info1WithoutReadonly = removeReadonly<Info1>
 let a: readOnlyType<Info1> = {
   name: '13',
   age: 19,
