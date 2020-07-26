@@ -138,8 +138,72 @@ let value10: unknown
 // value10()
 // new value10()
 // [10] 使用映射类型时，如果遍历的是 unknown 类型，则不会映射任何属性
-type Types1<T> ={
+type Types1<T> = {
   [P in keyof T]: T[P]
 }
 type type11 = Types1<any>
 type type12 = Types1<unknown>
+
+// T extends U ? X : Y
+type Types2<T> = T extends string ? string : boolean
+let val: Types2<'a'> = 'a'
+let val2: Types2<false>
+// 联合类型经过 extends 检查的效果
+type TypeName<T> = T extends any ? T : never
+type Type3 = TypeName<string | number>
+// 联合类型的 extends 校验逻辑
+type Diff<T, U> = T extends U ? never : T
+type Test2 = Diff<string | number | boolean, undefined | number> // string | boolean
+
+// 证明可以不显示地继承，TS 也可以判断的出 T 类型是不是继承于某个类型
+interface myInterface {
+  name: string
+}
+
+// 可以不显示地写 extends myInterface
+interface myInterface2 extends myInterface {
+  name: string
+  age: number
+}
+
+type myType<T> = T extends myInterface ? true : false
+let real: myType<myInterface2>
+// ------------------------------------------------------------------------
+type Type7<T> = {
+  [K in keyof T]: T[K] extends Function ? K : never
+}[keyof T] // 这个是为了返回所有值不为 never 的索引
+
+interface Part {
+  id: number
+  name: string
+  subparts: Part[]
+
+  updatePart(newName: string): void
+}
+
+// 也就是说经过Type7的过滤， 只有 updatePart 是函数类型，会被保留下来
+type Test1 = Type7<Part>
+// ------------------------------------------------------------------------
+// 条件类型的类型推断
+type Type9<T> = T extends Array<infer U> ? U : T // infer 推断这个 array 的子项是什么类型，记录到 U 变量
+type Test5 = Type9<string[]>
+
+// Exclude<T, U> 找出 T 里面不包含 U 的类型
+type Type10 = Exclude<'a' | 'b' | 'c', 'c' | 'a'>
+
+// Extract<T, U> 找出 T 中可以赋值给 U 的类型
+type Type11 = Extract<'a' | 'b' | 'c', 'c' | 'a'>
+
+// NonNullable<T> 从 T 中去掉 null 和 undefined
+type Type12 = NonNullable<string | number | null | undefined>
+
+// ReturnType<T>
+type Type13 = ReturnType<() => string>
+type Type14 = ReturnType<() => void>
+
+// InstanceType<T>
+class myClass {
+  constructor() {
+  }
+}
+type Type15 = InstanceType<typeof myClass>
